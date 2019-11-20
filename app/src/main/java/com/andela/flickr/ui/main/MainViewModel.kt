@@ -30,7 +30,7 @@ class MainViewModel : ViewModel() {
 		
 		call.enqueue(object : Callback<FlickrModel> {
 			override fun onFailure(call: Call<FlickrModel>, t: Throwable) {
-				//log error and show message.
+				Log.d("Photo Loading Error: ", t.message)
 			}
 			
 			override fun onResponse(call: Call<FlickrModel>, response: Response<FlickrModel>) {

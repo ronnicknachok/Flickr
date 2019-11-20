@@ -63,17 +63,24 @@ class MainFragment : Fragment() {
 	
 	private fun displayPhotos() {
 		viewModel.getPhotosFromFlickr(Constants.DEFAULT_SEARCH_TERM).observe(this, Observer {
-			adapter = MainAdapter(it.photos.photo, object : MainAdapter.OnItemClickListener {
-				override fun onItemClick(item: Photo) {
-					viewModel.passPhotoDetails(item)
-					activity?.supportFragmentManager?.beginTransaction()
-						?.replace(R.id.container, DetailedViewFragment.newInstance())
-						?.addToBackStack(null)
-						?.commit()
-				}
-				
-			})
-			mainRecyclerView.adapter = adapter
+			if (it.photos.photo.isNotEmpty()) {
+				mainRecyclerView.visibility = View.VISIBLE
+				tvNoResultsFound.visibility = View.GONE
+				adapter = MainAdapter(it.photos.photo, object : MainAdapter.OnItemClickListener {
+					override fun onItemClick(item: Photo) {
+						viewModel.passPhotoDetails(item)
+						activity?.supportFragmentManager?.beginTransaction()
+							?.replace(R.id.container, DetailedViewFragment.newInstance())
+							?.addToBackStack(null)
+							?.commit()
+					}
+					
+				})
+				mainRecyclerView.adapter = adapter
+			} else {
+				mainRecyclerView.visibility = View.GONE
+				tvNoResultsFound.visibility = View.VISIBLE
+			}
 		})
 	}
 }
